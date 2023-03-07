@@ -8,6 +8,10 @@ all: start
 start : clean main.o utils.o encrypt.o  lists.o functions.o $(STRUCTS_DIR)/transport.struct.h $(STRUCTS_DIR)/user.struct.h $(STRUCTS_DIR)/aux.struct.h ./include/header.h
 	$(CC) -o start $(OBJ_DIR)/main.o $(OBJ_DIR)/utils.o  $(OBJ_DIR)/encrypt.o   $(OBJ_DIR)/lists.o $(OBJ_DIR)/functions.o $(STRUCTS_DIR)/transport.struct.h $(STRUCTS_DIR)/user.struct.h $(STRUCTS_DIR)/aux.struct.h ./include/header.h 
 
+run: start
+	clear
+	./start
+
 main.o : main.c
 	$(CC) -c main.c
 	mv main.o $(OBJ_DIR)

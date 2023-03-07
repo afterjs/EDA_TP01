@@ -75,23 +75,6 @@ struct KeyValue arr[MAX] = {
     {"Z", "C"},
 };
 
-char *decrypt(char *str)
-{
-    int i, j;
-    for (i = 0; i < strlen(str); i++)
-    {
-        for (j = 0; j < MAX; j++)
-        {
-            if (str[i] == arr[j].value[0])
-            {
-                str[i] = arr[j].key[0];
-                break;
-            }
-        }
-    }
-    return str;
-}
-
 char *encrypt(char *str)
 {
     int i, j;
@@ -109,3 +92,4 @@ char *encrypt(char *str)
 
     return str;
 }
+

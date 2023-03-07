@@ -61,3 +61,22 @@ int existFile(char *path, char *openMode)
         return 0;
     }
 }
+
+void cls()
+{
+    system("clear");
+}
+
+void flushstdin(void)
+{
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+void press_to_continue()
+{
+    flushstdin();
+    fflush(stdin);
+    printf("\n\nPress enter to continue...");
+    getchar();
+}

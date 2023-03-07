@@ -3,28 +3,53 @@
 #include <string.h>
 #include <stdlib.h>
 
-
-
-void login()
+void login(User **users, Aux_User **user_details)
 
 {
-    char email[15];
-    char password[15];
+    char email[50];
+    char password[50];
 
+    cls();
     printf("Enter your email: ");
     do
     {
         scanf("%s", email);
         if (checkEmail(email) == 0)
         {
-            printf("Invalid email, try again: ");
+            cls();
+            printf("Invalid email, try again\n\n");
+            printf("Enter your email: ");
         }
     } while (checkEmail(email) == 0);
 
-    printf("Enter your password: ");
+    printf("\nEnter your password: ");
     scanf("%s", password);
 
-    encrypt(password);
+    if (authenticate(email, password, users, user_details) == 1)
+    {
+        if ((*user_details)->user_type == 0)
+        {
+            free(*users);
+            printf("Client\n");
+            press_to_continue();
+        }
+        else
+        {
+            printf("Admin\n");
+            press_to_continue();
+        }
+    }
+    else
+    {
+        cls();
+        printf("Invalid credentials, try again\n\n");
+        press_to_continue();
+        login(users, user_details);
+    }
+
+    cls();
+    printf("Occured an error, try again later\n\n");
+
 }
 
 void createUsersFile(User **users)
@@ -41,26 +66,27 @@ void createUsersFile(User **users)
     Aux_User *client = malloc(sizeof(Aux_User));
     Aux_User *admin = malloc(sizeof(Aux_User));
 
-
-
-    strcpy(client->uuid, gen_uuid());
+    strcpy(client->uuid, "71cf9278-cf92-4ecf-ac36-48c7c5d319d0");
     client->user_type = 0;
-    strcpy(client->personal_data.name, "a");
+    strcpy(client->personal_data.name, "Ricardo Amaro");
     client->personal_data.nif = 123456789;
-    strcpy(client->personal_data.email, "xavieramaro2@gmail.com");
+    strcpy(client->personal_data.login.email, "xavieramaro2@gmail.com");
+    strcpy(client->personal_data.login.password, "fmkcsr879132064");
+
     strcpy(client->personal_data.phone_number, "912345678");
     client->personal_data.balance = 133.12;
-    strcpy(client->personal_data.address.street, "rua");
-    strcpy(client->personal_data.address.city, "cidade");
-    strcpy(client->personal_data.address.country, "pais");
-    strcpy(client->personal_data.address.postal_code, "1234-123");
+    strcpy(client->personal_data.address.street, "Estrada Nacional 305");
+    strcpy(client->personal_data.address.city, "Viana do Castelo");
+    strcpy(client->personal_data.address.country, "Portugal");
+    strcpy(client->personal_data.address.postal_code, "4925-366");
 
-    strcpy(admin->uuid, gen_uuid());
+    strcpy(admin->uuid, "833407dd-6e8a-464d-adf9-e665451e850a");
     admin->user_type = 1;
-    strcpy(admin->personal_data.name, "amaro");
+    strcpy(admin->personal_data.name, "Ricardo Oliveira");
     admin->personal_data.nif = 934567890;
-    strcpy(admin->personal_data.email, "ricardo@gmail.com");
-    strcpy(admin->personal_data.phone_number, "927617597");
+    strcpy(admin->personal_data.login.email, "joao@gmail.com");
+    strcpy(admin->personal_data.login.password, "yixks879132064");
+    strcpy(admin->personal_data.phone_number, "+351968912312");
     admin->personal_data.balance = 0.00;
     strcpy(admin->personal_data.address.street, "boulevard");
     strcpy(admin->personal_data.address.city, "barcelona");
@@ -71,12 +97,13 @@ void createUsersFile(User **users)
     fseek(fp, 0, SEEK_END);
     fwrite(admin, sizeof(Aux_User), 1, fp);
 
-    free(client);
-    free(admin);
-
     fclose(fp);
 
-    load_users(users);
+    *users = insertUser(*users, client);
+    *users = insertUser(*users, admin);
+
+    free(client);
+    free(admin);
 }
 
 int load_users(User **users)
@@ -84,7 +111,6 @@ int load_users(User **users)
 
     if (existFile("./data/users.bin", "rb") == 0)
     {
-        printf("Creating users file..");
         createUsersFile(users);
         return 0;
     }
@@ -102,19 +128,6 @@ int load_users(User **users)
 
     while (fread(aux, sizeof(Aux_User), 1, fp) == 1)
     {
-        printf("\nUser ->%d", counter++);
-        printf("\nUUID: %s", aux->uuid);
-        printf("\nUser type: %d", aux->user_type);
-        printf("\nName: %s", aux->personal_data.name);
-        printf("\nNIF: %d", aux->personal_data.nif);
-        printf("\nEmail: %s", aux->personal_data.email);
-        printf("\nPhone number: %s", aux->personal_data.phone_number);
-        printf("\nBalance: %.2f", aux->personal_data.balance);
-        printf("\nStreet: %s", aux->personal_data.address.street);
-        printf("\nCity: %s", aux->personal_data.address.city);
-        printf("\nCountry: %s", aux->personal_data.address.country);
-        printf("\nPostal code: %s\n\n", aux->personal_data.address.postal_code);
-
         *users = insertUser(*users, aux);
     }
 
