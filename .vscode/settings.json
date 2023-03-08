@@ -1,0 +1,11 @@
+{
+          "C_Cpp.errorSquiggles": "disabled",
+          "files.associations": {
+                    "transport.struct.h": "c",
+                    "user.struct.h": "c",
+                    "header.h": "c",
+                    "stdio.h": "c",
+                    "string.h": "c",
+                    "stdlib.h": "c"
+          }
+}
