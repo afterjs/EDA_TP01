@@ -4,7 +4,6 @@
 #include <stdlib.h>
 
 void login(User **users, Aux_User **user_details)
-
 {
     char email[50];
     char password[50];
@@ -29,7 +28,7 @@ void login(User **users, Aux_User **user_details)
     {
         if ((*user_details)->user_type == 0)
         {
-            free(*users);
+            // free(*users);
             printf("Client\n");
             press_to_continue();
         }
@@ -49,19 +48,101 @@ void login(User **users, Aux_User **user_details)
 
     cls();
     printf("Occured an error, try again later\n\n");
+    exit(1);
 
 }
 
-void createUsersFile(User **users)
+void register_user(User **users, Aux_User **user_details)
 {
 
-    FILE *fp;
-    fp = fopen("./data/users.bin", "wb");
-    if (fp == NULL)
+    /* void getUserDetails() {
+         printf("\n\nT3EAHGIEABGWAGWAIIGW\n\n");
+     }*/
+
+    Aux_User *user = malloc(sizeof(Aux_User));
+
+    int option = 0;
+
+    do
     {
-        printf("Error opening file\n");
+        cls();
+
+        if (option != 0 && option != 1)
+        {
+            cls();
+
+            printf("Invalid option, try again\n\n");
+        }
+        printf("\t Create your account and start using our services\n\n");
+        printf("\t1 - Create Account\n");
+        printf("\t0 - Login\n\n");
+        printf("What do you want to do? Choose an option: ");
+        // getUserDetails();
+        scanf("%d", &option);
+
+    } while (option != 0 && option != 1);
+
+    switch (option)
+    {
+    case 1:
+        // user->user_type = 0;
+        break;
+    case 0:
+        login(users, user_details);
         return;
+    default:
+        break;
     }
+
+    cls();
+}
+
+void authMenu(User **users, Aux_User **user_details)
+{
+    int option = 0;
+
+    do
+    {
+        cls();
+
+        if (option < 0 || option > 2)
+        {
+            cls();
+
+            printf("Invalid option, try again\n\n");
+        }
+        printf("\tWelcome to the GoSmartCity\n\n");
+        printf("\t1 - Login\n");
+        printf("\t2 - Register\n");
+        printf("\t0 - Exit\n\n");
+        printf("What do you want to do? Choose an option: ");
+        scanf("%d", &option);
+    } while (option < 0 || option > 2);
+
+    switch (option)
+    {
+    case 1:
+        // login(&users, &user_details);
+        login(users, user_details);
+        break;
+    case 2:
+        register_user(users, user_details);
+        printf("Register\n");
+        press_to_continue();
+        break;
+
+    default:
+        cls();
+        printf("Thank you for using GoSmartCity!!!\n");
+        press_to_continue();
+        break;
+    }
+    free(*user_details);
+    free(*users);
+}
+
+int createUsersFile(User **users)
+{
 
     Aux_User *client = malloc(sizeof(Aux_User));
     Aux_User *admin = malloc(sizeof(Aux_User));
@@ -93,17 +174,12 @@ void createUsersFile(User **users)
     strcpy(admin->personal_data.address.country, "spain");
     strcpy(admin->personal_data.address.postal_code, "4925-366");
 
-    fwrite(client, sizeof(Aux_User), 1, fp);
-    fseek(fp, 0, SEEK_END);
-    fwrite(admin, sizeof(Aux_User), 1, fp);
-
-    fclose(fp);
-
-    *users = insertUser(*users, client);
-    *users = insertUser(*users, admin);
+    saveUserAtFile(client);
+    saveUserAtFile(admin);
 
     free(client);
     free(admin);
+    return 1;
 }
 
 int load_users(User **users)
@@ -112,7 +188,6 @@ int load_users(User **users)
     if (existFile("./data/users.bin", "rb") == 0)
     {
         createUsersFile(users);
-        return 0;
     }
 
     FILE *fp;

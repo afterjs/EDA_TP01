@@ -12,7 +12,7 @@ int main(int argc)
 
     if (load_users(&users))
     {
-        login(&users, &user_details);
+        authMenu(&users, &user_details);
     }
 
     return 0;

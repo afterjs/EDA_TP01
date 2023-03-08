@@ -3,6 +3,18 @@
 #include <string.h>
 #include <stdlib.h>
 
+int saveUserAtFile(Aux_User *user)
+{
+    FILE *fp = fopen("./data/users.bin", "ab");
+    if (fp == NULL)
+    {
+        return 0;
+    }
+    fwrite(user, sizeof(Aux_User), 1, fp);
+    fclose(fp);
+    return 1;
+}
+
 User *listUsers(User *users)
 {
     User *aux = users;
@@ -121,10 +133,8 @@ int authenticate(char *email, char *password, User **users, Aux_User **user_deta
 
     while (aux != NULL)
     {
-
         if (strcmp(aux->personal_data.login.email, email) == 0 && strcmp(aux->personal_data.login.password, encryptedPassword) == 0)
         {
-            // dereference user_details pointer twice to update it with new user's details
             (*user_details)->user_type = aux->user_type;
             strcpy((*user_details)->personal_data.name, aux->personal_data.name);
             (*user_details)->personal_data.nif = aux->personal_data.nif;
