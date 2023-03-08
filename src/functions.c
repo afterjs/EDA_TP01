@@ -28,7 +28,7 @@ void login(User **users, Aux_User **user_details)
     {
         if ((*user_details)->user_type == 0)
         {
-            // free(*users);
+
             printf("Client\n");
             press_to_continue();
         }
@@ -49,18 +49,10 @@ void login(User **users, Aux_User **user_details)
     cls();
     printf("Occured an error, try again later\n\n");
     exit(1);
-
 }
 
 void register_user(User **users, Aux_User **user_details)
 {
-
-    /* void getUserDetails() {
-         printf("\n\nT3EAHGIEABGWAGWAIIGW\n\n");
-     }*/
-
-    Aux_User *user = malloc(sizeof(Aux_User));
-
     int option = 0;
 
     do
@@ -77,7 +69,6 @@ void register_user(User **users, Aux_User **user_details)
         printf("\t1 - Create Account\n");
         printf("\t0 - Login\n\n");
         printf("What do you want to do? Choose an option: ");
-        // getUserDetails();
         scanf("%d", &option);
 
     } while (option != 0 && option != 1);
@@ -85,7 +76,14 @@ void register_user(User **users, Aux_User **user_details)
     switch (option)
     {
     case 1:
-        // user->user_type = 0;
+        Aux_User *aux = malloc(sizeof(Aux_User));
+
+        aux = getUserDetails(*users);
+        saveUserAtFile(aux);
+        *user_details = aux;
+        free(aux);
+        free(*users);
+
         break;
     case 0:
         login(users, user_details);
@@ -135,10 +133,10 @@ void authMenu(User **users, Aux_User **user_details)
         cls();
         printf("Thank you for using GoSmartCity!!!\n");
         press_to_continue();
+        free(*user_details);
+        free(*users);
         break;
     }
-    free(*user_details);
-    free(*users);
 }
 
 int createUsersFile(User **users)

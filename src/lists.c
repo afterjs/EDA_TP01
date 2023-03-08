@@ -43,20 +43,25 @@ User *listUsers(User *users)
 User *existUser(User *users, int *nif, char *email, char *phone_number)
 {
     User *aux = users;
+    char null[5];
     while (aux != NULL)
     {
-        if (aux->personal_data.nif == 0)
+        if (aux->personal_data.nif == *nif)
         {
+            *nif = -1;
             return aux;
         }
         if (strcmp(aux->personal_data.login.email, email) == 0)
         {
+            strcpy(email, null);
             return aux;
         }
         if (strcmp(aux->personal_data.phone_number, phone_number) == 0)
         {
+            strcpy(phone_number, null);
             return aux;
         }
+
         aux = aux->next_node;
     }
     return NULL;
@@ -123,6 +128,93 @@ User *insertUser(User *users, Aux_User *user)
     aux->next_node->next_node = NULL;
 
     return users;
+}
+
+Aux_User *getUserDetails(User *users)
+{
+
+    cls();
+    Aux_User *user = malloc(sizeof(Aux_User));
+    char null[5];
+
+    do
+    {
+        cls();
+        printf("Let's start choosing your email and password for login\n\n");
+
+        if (strcmp(user->personal_data.login.email, null) == 0)
+        {
+            printf("\tThis email is already in use, try again!\n\n");
+        }
+
+        if (user->personal_data.nif == -1)
+        {
+            printf("\tThis NIF is already in use, try again!\n\n");
+        }
+
+        if (strcmp(user->personal_data.phone_number, null) == 0)
+        {
+            printf("\tThis phone number is already in use, try again!\n\n");
+        }
+
+        printf("Enter your email: ");
+
+        do
+        {
+            scanf("%s", user->personal_data.login.email);
+            if (checkEmail(user->personal_data.login.email) == 0)
+            {
+                cls();
+                printf("Invalid email, try again\n\n");
+                printf("Enter your email: ");
+            }
+        } while (checkEmail(user->personal_data.login.email) == 0);
+
+        cls();
+        printf("Let's start choosing your email and password for login\n\n");
+        printf("Enter your email: %s\n", user->personal_data.login.email);
+        printf("\nEnter your NIF: ");
+        scanf("%d", &user->personal_data.nif);
+        flushstdin();
+        printf("\nEnter your phone number: ");
+        scanf("%[^;\n]", user->personal_data.phone_number);
+
+    } while (existUser(users, &user->personal_data.nif, user->personal_data.login.email, user->personal_data.phone_number) != NULL);
+
+    printf("\nEnter your password: ");
+    scanf("%s", user->personal_data.login.password);
+
+    cls();
+    printf("Incredible, let's some details about you!\n\n");
+
+    flushstdin();
+    printf("Enter your name: ");
+    scanf("%[^;\n]", user->personal_data.name);
+
+    flushstdin();
+    printf("\nEnter your street (Ex: Vila de Frescainha): ");
+    scanf("%[^;\n]", user->personal_data.address.street);
+
+    flushstdin();
+    printf("\nEnter your city (Ex: Barcelos): ");
+    scanf("%[^;\n]", user->personal_data.address.city);
+
+    flushstdin();
+    printf("\nEnter your country (Ex: Portugal): ");
+    scanf("%[^;\n]", user->personal_data.address.country);
+
+    flushstdin();
+    printf("\nEnter your postal code (Ex: 4750-000): ");
+    scanf("%[^;\n]", user->personal_data.address.postal_code);
+
+    user->personal_data.balance = 0.0;
+    user->user_type = 0;
+    strcpy(user->uuid, gen_uuid());
+    encrypt(user->personal_data.login.password);
+
+    
+
+    return user;
 }
 
 int authenticate(char *email, char *password, User **users, Aux_User **user_details)
