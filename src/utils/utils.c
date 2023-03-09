@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
 char *gen_uuid()
 {
@@ -70,7 +71,8 @@ void cls()
 void flushstdin(void)
 {
     int c;
-    while ((c = getchar()) != '\n' && c != EOF);
+    while ((c = getchar()) != '\n' && c != EOF)
+        ;
 }
 
 void press_to_continue()
@@ -79,4 +81,26 @@ void press_to_continue()
     fflush(stdin);
     printf("\n\nPress enter to continue...");
     getchar();
+}
+
+int getAge(int day, int month, int year)
+{
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+
+    int age = tm.tm_year + 1900 - year;
+
+    if (tm.tm_mon + 1 < month)
+    {
+        age--;
+    }
+    else if (tm.tm_mon + 1 == month)
+    {
+        if (tm.tm_mday < day)
+        {
+            age--;
+        }
+    }
+
+    return age;
 }

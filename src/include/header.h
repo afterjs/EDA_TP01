@@ -1,8 +1,9 @@
-#include "../structs/transport.struct.h"
 #include "../structs/user.struct.h"
-#include "../structs/aux.struct.h"
+#include "../structs/aux.user.struct.h"
+#include "../structs/aux.transport.struct.h"
+#include "../structs/transport.struct.h"
 
-int main();
+int client_main(Aux_User **user_details);
 void login(User **users, Aux_User **user_details);
 void register_user(User **users, Aux_User **user_details);
 Aux_User *getUserDetails(User *users);
@@ -21,3 +22,6 @@ void press_to_continue();
 void flushstdin(void);
 int saveUserAtFile(Aux_User *user);
 void authMenu(User **users, Aux_User **user_details);
+int getAge(int day, int month, int year);
+int loadTransport(Transport **transports);
+int createTransportFile(Transport **transports);

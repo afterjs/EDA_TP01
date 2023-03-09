@@ -1,3 +1,10 @@
+typedef struct dob
+{
+    int day;
+    int month;
+    int year;
+} Dob;
+
 typedef struct address
 {
     char street[150];
@@ -15,6 +22,7 @@ typedef struct login
 typedef struct personal_data
 {
     char name[50];
+    Dob dob;
     int nif;
     char phone_number[25]; // 15 is the size of the biggest phone number in the world
     float balance;         // Balance of the user

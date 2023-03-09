@@ -1,4 +1,4 @@
-#include "./include/header.h"
+#include "../include/header.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -27,6 +27,7 @@ User *listUsers(User *users)
         printf("\nUser type: %d", aux->user_type);
         printf("\nName: %s", aux->personal_data.name);
         printf("\nNIF: %d", aux->personal_data.nif);
+        printf("\nDate of birth: %d/%d/%d", aux->personal_data.dob.day, aux->personal_data.dob.month, aux->personal_data.dob.year);
         printf("\nEmail: %s", aux->personal_data.login.email);
         printf("\nPassword: %s", aux->personal_data.login.password);
         printf("\nPhone number: %s", aux->personal_data.phone_number);
@@ -43,7 +44,7 @@ User *listUsers(User *users)
 User *existUser(User *users, int *nif, char *email, char *phone_number)
 {
     User *aux = users;
-    char null[5];
+
     while (aux != NULL)
     {
         if (aux->personal_data.nif == *nif)
@@ -53,12 +54,13 @@ User *existUser(User *users, int *nif, char *email, char *phone_number)
         }
         if (strcmp(aux->personal_data.login.email, email) == 0)
         {
-            strcpy(email, null);
+            strcpy(email, "-----------");
             return aux;
         }
+
         if (strcmp(aux->personal_data.phone_number, phone_number) == 0)
         {
-            strcpy(phone_number, null);
+            strcpy(phone_number, "-----------");
             return aux;
         }
 
@@ -84,6 +86,9 @@ User *insertUser(User *users, Aux_User *user)
         users->user_type = user->user_type;
         strcpy(users->personal_data.name, user->personal_data.name);
         users->personal_data.nif = user->personal_data.nif;
+        users->personal_data.dob.day = user->personal_data.dob.day;
+        users->personal_data.dob.month = user->personal_data.dob.month;
+        users->personal_data.dob.year = user->personal_data.dob.year;
         strcpy(users->personal_data.login.email, user->personal_data.login.email);
         strcpy(users->personal_data.login.password, user->personal_data.login.password);
         strcpy(users->personal_data.phone_number, user->personal_data.phone_number);
@@ -117,6 +122,9 @@ User *insertUser(User *users, Aux_User *user)
     aux->next_node->user_type = user->user_type;
     strcpy(aux->next_node->personal_data.name, user->personal_data.name);
     aux->next_node->personal_data.nif = user->personal_data.nif;
+    aux->next_node->personal_data.dob.day = user->personal_data.dob.day;
+    aux->next_node->personal_data.dob.month = user->personal_data.dob.month;
+    aux->next_node->personal_data.dob.year = user->personal_data.dob.year;
     strcpy(aux->next_node->personal_data.login.email, user->personal_data.login.email);
     strcpy(aux->next_node->personal_data.login.password, user->personal_data.login.password);
     strcpy(aux->next_node->personal_data.phone_number, user->personal_data.phone_number);
@@ -135,14 +143,31 @@ Aux_User *getUserDetails(User *users)
 
     cls();
     Aux_User *user = malloc(sizeof(Aux_User));
-    char null[5];
+    int age = 0;
+
+    printf("Before we start, we need to know when its your birthday!\n\n");
+
+    printf("Enter your day of birth (dd/mm/yyyy): ");
+    scanf("%d/%d/%d", &user->personal_data.dob.day, &user->personal_data.dob.month, &user->personal_data.dob.year);
+    age = getAge(user->personal_data.dob.day, user->personal_data.dob.month, user->personal_data.dob.year);
+
+    if (age < 18)
+    {
+        cls();
+        printf("You are not old enough to use this app! 😟.\n");
+        press_to_continue();
+        return NULL;
+    }
 
     do
     {
         cls();
+
         printf("Let's start choosing your email and password for login\n\n");
 
-        if (strcmp(user->personal_data.login.email, null) == 0)
+        flushstdin();
+
+        if (strcmp(user->personal_data.login.email, "-----------") == 0)
         {
             printf("\tThis email is already in use, try again!\n\n");
         }
@@ -152,7 +177,7 @@ Aux_User *getUserDetails(User *users)
             printf("\tThis NIF is already in use, try again!\n\n");
         }
 
-        if (strcmp(user->personal_data.phone_number, null) == 0)
+        if (strcmp(user->personal_data.phone_number, "-----------") == 0)
         {
             printf("\tThis phone number is already in use, try again!\n\n");
         }
@@ -212,37 +237,35 @@ Aux_User *getUserDetails(User *users)
     strcpy(user->uuid, gen_uuid());
     encrypt(user->personal_data.login.password);
 
-    
-
     return user;
 }
 
-int authenticate(char *email, char *password, User **users, Aux_User **user_details)
+int load_users(User **users)
 {
-    char *encryptedPassword = encrypt(password);
 
-    User *aux = *users;
-
-    while (aux != NULL)
+    if (existFile("./data/users.bin", "rb") == 0)
     {
-        if (strcmp(aux->personal_data.login.email, email) == 0 && strcmp(aux->personal_data.login.password, encryptedPassword) == 0)
-        {
-            (*user_details)->user_type = aux->user_type;
-            strcpy((*user_details)->personal_data.name, aux->personal_data.name);
-            (*user_details)->personal_data.nif = aux->personal_data.nif;
-            strcpy((*user_details)->personal_data.login.email, aux->personal_data.login.email);
-            strcpy((*user_details)->personal_data.login.password, aux->personal_data.login.password);
-            strcpy((*user_details)->personal_data.phone_number, aux->personal_data.phone_number);
-            (*user_details)->personal_data.balance = aux->personal_data.balance;
-            strcpy((*user_details)->personal_data.address.street, aux->personal_data.address.street);
-            strcpy((*user_details)->personal_data.address.city, aux->personal_data.address.city);
-            strcpy((*user_details)->personal_data.address.country, aux->personal_data.address.country);
-            strcpy((*user_details)->personal_data.address.postal_code, aux->personal_data.address.postal_code);
-
-            return 1;
-        }
-        aux = aux->next_node;
+        createUsersFile(users);
     }
 
-    return 0;
+    FILE *fp;
+    fp = fopen("./data/users.bin", "rb");
+    if (fp == NULL)
+    {
+        printf("Error opening file\n");
+        return 0;
+    }
+
+    Aux_User *aux = malloc(sizeof(Aux_User));
+    int counter = 1;
+
+    while (fread(aux, sizeof(Aux_User), 1, fp) == 1)
+    {
+        *users = insertUser(*users, aux);
+    }
+
+    free(aux);
+
+    fclose(fp);
+    return 1;
 }

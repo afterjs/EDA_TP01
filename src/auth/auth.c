@@ -1,4 +1,4 @@
-#include "./include/header.h"
+#include "../include/header.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -29,8 +29,8 @@ void login(User **users, Aux_User **user_details)
         if ((*user_details)->user_type == 0)
         {
 
-            printf("Client\n");
-            press_to_continue();
+            free(*users);
+            client_main(user_details);
         }
         else
         {
@@ -45,10 +45,6 @@ void login(User **users, Aux_User **user_details)
         press_to_continue();
         login(users, user_details);
     }
-
-    cls();
-    printf("Occured an error, try again later\n\n");
-    exit(1);
 }
 
 void register_user(User **users, Aux_User **user_details)
@@ -77,13 +73,17 @@ void register_user(User **users, Aux_User **user_details)
     {
     case 1:
         Aux_User *aux = malloc(sizeof(Aux_User));
-
         aux = getUserDetails(*users);
+
+        if (aux == NULL)
+        {
+            authMenu(users, user_details);
+        }
+
         saveUserAtFile(aux);
         *user_details = aux;
         free(aux);
         free(*users);
-
         break;
     case 0:
         login(users, user_details);
@@ -109,6 +109,7 @@ void authMenu(User **users, Aux_User **user_details)
 
             printf("Invalid option, try again\n\n");
         }
+
         printf("\tWelcome to the GoSmartCity\n\n");
         printf("\t1 - Login\n");
         printf("\t2 - Register\n");
@@ -149,9 +150,11 @@ int createUsersFile(User **users)
     client->user_type = 0;
     strcpy(client->personal_data.name, "Ricardo Amaro");
     client->personal_data.nif = 123456789;
+    client->personal_data.dob.day = 12;
+    client->personal_data.dob.month = 12;
+    client->personal_data.dob.year = 1999;
     strcpy(client->personal_data.login.email, "xavieramaro2@gmail.com");
     strcpy(client->personal_data.login.password, "fmkcsr879132064");
-
     strcpy(client->personal_data.phone_number, "912345678");
     client->personal_data.balance = 133.12;
     strcpy(client->personal_data.address.street, "Estrada Nacional 305");
@@ -163,6 +166,9 @@ int createUsersFile(User **users)
     admin->user_type = 1;
     strcpy(admin->personal_data.name, "Ricardo Oliveira");
     admin->personal_data.nif = 934567890;
+    client->personal_data.dob.day = 12;
+    client->personal_data.dob.month = 12;
+    client->personal_data.dob.year = 1999;
     strcpy(admin->personal_data.login.email, "joao@gmail.com");
     strcpy(admin->personal_data.login.password, "yixks879132064");
     strcpy(admin->personal_data.phone_number, "+351968912312");
@@ -180,32 +186,32 @@ int createUsersFile(User **users)
     return 1;
 }
 
-int load_users(User **users)
+int authenticate(char *email, char *password, User **users, Aux_User **user_details)
 {
+    char *encryptedPassword = encrypt(password);
 
-    if (existFile("./data/users.bin", "rb") == 0)
+    User *aux = *users;
+
+    while (aux != NULL)
     {
-        createUsersFile(users);
+        if (strcmp(aux->personal_data.login.email, email) == 0 && strcmp(aux->personal_data.login.password, encryptedPassword) == 0)
+        {
+            (*user_details)->user_type = aux->user_type;
+            strcpy((*user_details)->personal_data.name, aux->personal_data.name);
+            (*user_details)->personal_data.nif = aux->personal_data.nif;
+            strcpy((*user_details)->personal_data.login.email, aux->personal_data.login.email);
+            strcpy((*user_details)->personal_data.login.password, aux->personal_data.login.password);
+            strcpy((*user_details)->personal_data.phone_number, aux->personal_data.phone_number);
+            (*user_details)->personal_data.balance = aux->personal_data.balance;
+            strcpy((*user_details)->personal_data.address.street, aux->personal_data.address.street);
+            strcpy((*user_details)->personal_data.address.city, aux->personal_data.address.city);
+            strcpy((*user_details)->personal_data.address.country, aux->personal_data.address.country);
+            strcpy((*user_details)->personal_data.address.postal_code, aux->personal_data.address.postal_code);
+
+            return 1;
+        }
+        aux = aux->next_node;
     }
 
-    FILE *fp;
-    fp = fopen("./data/users.bin", "rb");
-    if (fp == NULL)
-    {
-        printf("Error opening file\n");
-        return 0;
-    }
-
-    Aux_User *aux = malloc(sizeof(Aux_User));
-    int counter = 1;
-
-    while (fread(aux, sizeof(Aux_User), 1, fp) == 1)
-    {
-        *users = insertUser(*users, aux);
-    }
-
-    free(aux);
-
-    fclose(fp);
-    return 1;
+    return 0;
 }
