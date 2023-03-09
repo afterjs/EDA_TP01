@@ -11,7 +11,7 @@ typedef struct aux_transport_node
     char position[48];
     float battery; // Battery of the transport
     int state;     // State of the transport
-    Aux_Price *price;
+    Aux_Price price;
 } Aux_Transport;
 
 // read from file and push to enum TransportType

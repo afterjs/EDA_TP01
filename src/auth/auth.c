@@ -140,7 +140,7 @@ void authMenu(User **users, Aux_User **user_details)
     }
 }
 
-int createUsersFile(User **users)
+int createUsersFile()
 {
 
     Aux_User *client = malloc(sizeof(Aux_User));

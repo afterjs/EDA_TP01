@@ -245,7 +245,7 @@ int load_users(User **users)
 
     if (existFile("./data/users.bin", "rb") == 0)
     {
-        createUsersFile(users);
+        createUsersFile();
     }
 
     FILE *fp;

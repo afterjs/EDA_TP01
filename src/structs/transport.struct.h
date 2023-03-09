@@ -11,7 +11,7 @@ typedef struct transport_node
     char position[48];
     float battery; // Battery of the transport
     int state;     // State of the transport 1 - taken
-    Price *price;
+    Price price;
     struct transport_node *next_node; // Pointer to the next node
 } Transport;
 
