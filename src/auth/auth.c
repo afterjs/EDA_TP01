@@ -28,13 +28,12 @@ void login(User **users, Aux_User **user_details)
     {
         if ((*user_details)->user_type == 0)
         {
-
             free(*users);
             client_main(user_details);
         }
         else
         {
-            printf("Admin\n");
+            printf("MENU ADMIN\n");
             press_to_continue();
         }
     }
@@ -121,12 +120,10 @@ void authMenu(User **users, Aux_User **user_details)
     switch (option)
     {
     case 1:
-        // login(&users, &user_details);
         login(users, user_details);
         break;
     case 2:
         register_user(users, user_details);
-        printf("Register\n");
         press_to_continue();
         break;
 

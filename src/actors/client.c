@@ -13,6 +13,7 @@ int createTransportFile()
 
     strcpy(t1->uuid, "e8f3f3d1-12bf-47a3-8d2c-bbe50d09731e");
     strcpy(t1->type_name, "Scooter");
+    strcpy(t1->code, "MTP412");
     strcpy(t1->position, "///sulkily.choirs.lorry");
     t1->battery = 87.6;
     t1->state = 1;
@@ -21,6 +22,7 @@ int createTransportFile()
 
     strcpy(t2->uuid, "6c5e9fb5-5b5f-4d01-97c2-37e4c8b1d0ad");
     strcpy(t2->type_name, "Electric Bike");
+    strcpy(t2->code, "XMN123");
     strcpy(t2->position, "///stubbornly.revalue.secreted");
     t2->battery = 68.9;
     t2->state = 0;
@@ -29,6 +31,7 @@ int createTransportFile()
 
     strcpy(t3->uuid, "3a22c1e9-1a54-4c8b-a2d2-8684a4c99727");
     strcpy(t3->type_name, "Skateboard");
+    strcpy(t3->code, "LEN321");
     strcpy(t3->position, "///vampires.dials.cancels");
     t3->battery = 92.1;
     t3->state = 1;
@@ -37,6 +40,7 @@ int createTransportFile()
 
     strcpy(t4->uuid, "bfe13e61-3b3f-49ee-9bfe-537b22e09dc8");
     strcpy(t4->type_name, "Electric Scooter");
+    strcpy(t4->code, "FTN416");
     strcpy(t4->position, "///sulkily.choirs.lorry");
     t4->battery = 49.2;
     t4->state = 0;
@@ -56,6 +60,24 @@ int createTransportFile()
     return 0;
 }
 
+void showMenu(Aux_User *user, Transport **transports)
+{
+    int option = 1;
+
+    while (1)
+    {
+        do
+        {
+
+            printf("\n| 1- Alugar um meio.                                                                      |");
+            printf("\n\tChoose an option: ");
+            scanf("%d", &option);
+            flushstdin();
+
+        } while (option < 1 || option > 7);
+    }
+}
+
 int client_main(Aux_User **user_details)
 {
 
@@ -66,19 +88,7 @@ int client_main(Aux_User **user_details)
 
     if (loadTransport(&transports))
     {
-
-        Transport *aux = transports;
-
-        
-        while (aux != NULL)
-        {
-            printf("\nUUID: %s | Type: %s | Position: %s | Battery: %.2f | State: %d | Price: %.2f | Price per minute: %.2f | Next: %p | \n", aux->uuid, aux->type_name, aux->position, aux->battery, aux->state, aux->price.price_base, aux->price.price_per_minute, aux->next_node);
-        }
-
-        free(transports);
-
-        return 0;
+        showMenu(user, &transports);
+        return 1;
     }
-
-    return 1;
 }

@@ -1,4 +1,4 @@
-e8f3f3d1-12bf-47a3-8d2c-bbe50d09731e;Scooter;///sulkily.choirs.lorry;87.60;1;1.00;0.20
-6c5e9fb5-5b5f-4d01-97c2-37e4c8b1d0ad;Electric Bike;///stubbornly.revalue.secreted;68.90;0;0.80;0.25
-3a22c1e9-1a54-4c8b-a2d2-8684a4c99727;Skateboard;///vampires.dials.cancels;92.10;1;0.60;0.10
-bfe13e61-3b3f-49ee-9bfe-537b22e09dc8;Electric Scooter;///sulkily.choirs.lorry;49.20;0;1.20;0.30
+e8f3f3d1-12bf-47a3-8d2c-bbe50d09731e;Scooter;MTP412;///sulkily.choirs.lorry;87.60;1;1.00;0.20
+6c5e9fb5-5b5f-4d01-97c2-37e4c8b1d0ad;Electric Bike;XMN123;///stubbornly.revalue.secreted;68.90;0;0.80;0.25
+3a22c1e9-1a54-4c8b-a2d2-8684a4c99727;Skateboard;LEN321;///vampires.dials.cancels;92.10;1;0.60;0.10
+bfe13e61-3b3f-49ee-9bfe-537b22e09dc8;Electric Scooter;FTN416;///sulkily.choirs.lorry;49.20;0;1.20;0.30

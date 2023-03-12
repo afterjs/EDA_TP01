@@ -7,6 +7,7 @@ typedef struct aux_price
 typedef struct aux_transport_node
 {
     char uuid[37]; // 36 is the size of a UUID
+    char code[7]; // Code of the transport
     char type_name[50];
     char position[48];
     float battery; // Battery of the transport
