@@ -3,15 +3,43 @@
 #include <string.h>
 #include <stdlib.h>
 
+int updateUserAtFile(Aux_User *user)
+{
+    FILE *fp = fopen("./data/users.bin", "rb+");
+    if (fp == NULL)
+    {
+        return 0;
+    }
+    Aux_User aux;
+    while (fread(&aux, sizeof(Aux_User), 1, fp))
+    {
+        if (strcmp(aux.uuid, user->uuid) == 0)
+        {
+            fseek(fp, -sizeof(Aux_User), SEEK_CUR);
+            fwrite(user, sizeof(Aux_User), 1, fp);
+            fclose(fp);
+            return 1;
+        }
+    }
+    fclose(fp);
+    return 0;
+}
+
 int saveUserAtFile(Aux_User *user)
 {
+
+    printf("\nsaving new user at file with email -> %s", user->personal_data.login.email);
+
     FILE *fp = fopen("./data/users.bin", "ab");
     if (fp == NULL)
     {
         return 0;
     }
+
     fwrite(user, sizeof(Aux_User), 1, fp);
     fclose(fp);
+
+    press_to_continue();
     return 1;
 }
 
@@ -74,6 +102,7 @@ User *insertUser(User *users, Aux_User *user)
 
     if (users == NULL)
     {
+
         users = malloc(sizeof(User));
 
         if (users == NULL)
@@ -84,6 +113,7 @@ User *insertUser(User *users, Aux_User *user)
 
         strcpy(users->uuid, user->uuid);
         users->user_type = user->user_type;
+
         strcpy(users->personal_data.name, user->personal_data.name);
         users->personal_data.nif = user->personal_data.nif;
         users->personal_data.dob.day = user->personal_data.dob.day;
@@ -97,6 +127,10 @@ User *insertUser(User *users, Aux_User *user)
         strcpy(users->personal_data.address.city, user->personal_data.address.city);
         strcpy(users->personal_data.address.country, user->personal_data.address.country);
         strcpy(users->personal_data.address.postal_code, user->personal_data.address.postal_code);
+        strcpy(users->rented_transport.uuid, user->rented_transport.uuid);
+        strcpy(users->rented_transport.rented_transport_type, user->rented_transport.rented_transport_type);
+        strcpy(users->rented_transport.rented_transport_code, user->rented_transport.rented_transport_code);
+        users->rented_transport.rented_at = user->rented_transport.rented_at;
         users->next_node = NULL;
 
         return users;
@@ -133,6 +167,12 @@ User *insertUser(User *users, Aux_User *user)
     strcpy(aux->next_node->personal_data.address.city, user->personal_data.address.city);
     strcpy(aux->next_node->personal_data.address.country, user->personal_data.address.country);
     strcpy(aux->next_node->personal_data.address.postal_code, user->personal_data.address.postal_code);
+
+    strcpy(aux->next_node->rented_transport.uuid, user->rented_transport.uuid);
+    strcpy(aux->next_node->rented_transport.rented_transport_type, user->rented_transport.rented_transport_type);
+    strcpy(aux->next_node->rented_transport.rented_transport_code, user->rented_transport.rented_transport_code);
+    aux->next_node->rented_transport.rented_at = user->rented_transport.rented_at;
+
     aux->next_node->next_node = NULL;
 
     return users;
@@ -234,6 +274,7 @@ Aux_User *getUserDetails(User *users)
 
     user->personal_data.balance = 0.0;
     user->user_type = 0;
+    strcpy(user->rented_transport.rented_transport_code, "XXX000");
     strcpy(user->uuid, gen_uuid());
     encrypt(user->personal_data.login.password);
 
@@ -250,6 +291,7 @@ int load_users(User **users)
 
     FILE *fp;
     fp = fopen("./data/users.bin", "rb");
+
     if (fp == NULL)
     {
         printf("Error opening file\n");
@@ -261,11 +303,22 @@ int load_users(User **users)
 
     while (fread(aux, sizeof(Aux_User), 1, fp) == 1)
     {
+
         *users = insertUser(*users, aux);
     }
 
     free(aux);
-
     fclose(fp);
+
+    while (*users != NULL)
+    {
+        printf("\nUsername -> %s", (*users)->personal_data.login.email);
+        printf("\nNIF -> %d", (*users)->personal_data.nif);
+        printf("\nDob -> %d/%d/%d\n", (*users)->personal_data.dob.day, (*users)->personal_data.dob.month, (*users)->personal_data.dob.year);
+        *users = (*users)->next_node;
+    }
+
+    press_to_continue();
+
     return 1;
 }

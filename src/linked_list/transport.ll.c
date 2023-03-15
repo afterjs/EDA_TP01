@@ -3,6 +3,56 @@
 #include <string.h>
 #include <stdlib.h>
 
+int updateTransportAtFile(Aux_Transport *transport)
+{
+    FILE *file = fopen("data/transport.txt", "r+"); // Open file in read-write mode
+
+    if (file == NULL)
+    {
+        printf("Error opening file!");
+        return 0;
+    }
+
+    char line[4096];
+    long pos = 0; // Keep track of the file position
+
+    while (fgets(line, sizeof(line), file))
+    {
+
+        if (strstr(line, transport->uuid) != NULL)
+        {
+            fseek(file, pos, SEEK_SET); // Move file pointer to the beginning of the line
+            fprintf(file, "%s;%s;%s;%s;%.2f;%d;%.2f;%.2f\n", transport->uuid, transport->type_name, transport->code, transport->position, transport->battery, transport->state, transport->price.price_base, transport->price.price_per_minute);
+            break; // Stop searching for the UUID once found and updated
+        }
+
+        pos = ftell(file); // Get the current file position
+    }
+
+    fclose(file);
+    return 1;
+}
+
+// 0 disponivel | 1 alugado
+
+Transport *checkTransportAvailable(Transport *transports, char *code)
+{
+
+    Transport *aux = transports;
+    while (aux != NULL)
+    {
+
+        if (strcmp(code, aux->code) == 0)
+        {
+            return aux;
+        }
+
+        aux = aux->next_node;
+    }
+
+    return NULL;
+}
+
 Transport *insertTransport(Transport *transports, Aux_Transport *transport)
 {
     if (transports == NULL)
@@ -67,8 +117,6 @@ int saveTransportAtFile(Aux_Transport *transport)
         exit(1);
     }
 
-    // fprintf(file, "%s;%s;%s;%s;%.2f;%d;%.2f;%.2f\n", transport->uuid, transport->type_name, transport->code, transport->position, transport->battery, transport->state, transport->price.price_base, transport->price.price_per_minute);
-
     fprintf(file, "%s;%s;%s;%s;%.2f;%d;%.2f;%.2f\n", transport->uuid, transport->type_name, transport->code, transport->position, transport->battery, transport->state, transport->price.price_base, transport->price.price_per_minute);
 
     fclose(file);
@@ -94,6 +142,7 @@ int loadTransport(Transport **transports)
 
     while (fscanf(file, "%[^;];%[^;];%[^;];%[^;];%f;%d;%f;%f\n", aux->uuid, aux->type_name, aux->code, aux->position, &aux->battery, &aux->state, &aux->price.price_base, &aux->price.price_per_minute) != EOF)
     {
+
         *transports = insertTransport(*transports, aux);
     }
 

@@ -104,3 +104,13 @@ int getAge(int day, int month, int year)
 
     return age;
 }
+
+// convert timestamp to text format dd/mm/yyyy hh:mm:ss
+
+char *timestamp_to_text(time_t timestamp)
+{
+    struct tm *tm = localtime(&timestamp);
+    static char buf[20];
+    strftime(buf, sizeof(buf), "%d/%m/%Y %H:%M:%S", tm);
+    return buf;
+}

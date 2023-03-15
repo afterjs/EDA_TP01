@@ -1,3 +1,4 @@
+#include <time.h>
 typedef struct aux_dob
 {
     int day;
@@ -31,9 +32,18 @@ typedef struct aux_personal_data
     Aux_Login login;
 } Aux_PersonalData;
 
+typedef struct aux_rented_transport
+{
+    char uuid[37];                  // 36 + 1 (\0) is the size of a UUID
+    char rented_transport_code[7];  // Code of the transport
+    char rented_transport_type[50]; // Type of the transport
+    time_t rented_at;
+} Aux_RentedTransport;
+
 typedef struct aux_user
 {
     char uuid[37]; // 36 + 1 (\0) is the size of a UUID
     int user_type; // 0 for normal user, 1 for admin
     Aux_PersonalData personal_data;
+    Aux_RentedTransport rented_transport;
 } Aux_User;

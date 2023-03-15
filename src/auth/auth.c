@@ -24,9 +24,14 @@ void login(User **users, Aux_User **user_details)
     printf("\nEnter your password: ");
     scanf("%s", password);
 
+    printf("\nEmail -> %s", email);
+    printf("\nPassword -> %s", password);
+
     if (authenticate(email, password, users, user_details) == 1)
     {
-        if ((*user_details)->user_type == 0)
+
+            printf("\nMENU USER\n");
+        /*if ((*user_details)->user_type == 0)
         {
             free(*users);
             client_main(user_details);
@@ -35,7 +40,7 @@ void login(User **users, Aux_User **user_details)
         {
             printf("MENU ADMIN\n");
             press_to_continue();
-        }
+        }*/
     }
     else
     {
@@ -44,6 +49,8 @@ void login(User **users, Aux_User **user_details)
         press_to_continue();
         login(users, user_details);
     }
+
+    press_to_continue();
 }
 
 void register_user(User **users, Aux_User **user_details)
@@ -124,9 +131,10 @@ void authMenu(User **users, Aux_User **user_details)
         break;
     case 2:
         register_user(users, user_details);
+        printf("User registered successfully\n");
         press_to_continue();
+        login(users, user_details);
         break;
-
     default:
         cls();
         printf("Thank you for using GoSmartCity!!!\n");
@@ -147,25 +155,27 @@ int createUsersFile()
     client->user_type = 0;
     strcpy(client->personal_data.name, "Ricardo Amaro");
     client->personal_data.nif = 123456789;
-    client->personal_data.dob.day = 12;
+    client->personal_data.dob.day = 14;
     client->personal_data.dob.month = 12;
-    client->personal_data.dob.year = 1999;
+    client->personal_data.dob.year = 2001;
     strcpy(client->personal_data.login.email, "xavieramaro2@gmail.com");
     strcpy(client->personal_data.login.password, "fmkcsr879132064");
     strcpy(client->personal_data.phone_number, "912345678");
-    client->personal_data.balance = 133.12;
+    client->personal_data.balance = 5.00;
     strcpy(client->personal_data.address.street, "Estrada Nacional 305");
     strcpy(client->personal_data.address.city, "Viana do Castelo");
     strcpy(client->personal_data.address.country, "Portugal");
     strcpy(client->personal_data.address.postal_code, "4925-366");
 
+    strcpy(client->rented_transport.rented_transport_code, "XXX000");
+
     strcpy(admin->uuid, "833407dd-6e8a-464d-adf9-e665451e850a");
     admin->user_type = 1;
     strcpy(admin->personal_data.name, "Ricardo Oliveira");
     admin->personal_data.nif = 934567890;
-    client->personal_data.dob.day = 12;
-    client->personal_data.dob.month = 12;
-    client->personal_data.dob.year = 1999;
+    admin->personal_data.dob.day = 12;
+    admin->personal_data.dob.month = 12;
+    admin->personal_data.dob.year = 1999;
     strcpy(admin->personal_data.login.email, "joao@gmail.com");
     strcpy(admin->personal_data.login.password, "yixks879132064");
     strcpy(admin->personal_data.phone_number, "+351968912312");
@@ -174,6 +184,8 @@ int createUsersFile()
     strcpy(admin->personal_data.address.city, "barcelona");
     strcpy(admin->personal_data.address.country, "spain");
     strcpy(admin->personal_data.address.postal_code, "4925-366");
+
+    strcpy(admin->rented_transport.rented_transport_code, "XXX000");
 
     saveUserAtFile(client);
     saveUserAtFile(admin);
@@ -185,30 +197,50 @@ int createUsersFile()
 
 int authenticate(char *email, char *password, User **users, Aux_User **user_details)
 {
-    char *encryptedPassword = encrypt(password);
+
+
+    
+
+
+   /* char *encryptedPassword = encrypt(password);
 
     User *aux = *users;
 
+   
     while (aux != NULL)
     {
-        if (strcmp(aux->personal_data.login.email, email) == 0 && strcmp(aux->personal_data.login.password, encryptedPassword) == 0)
-        {
-            (*user_details)->user_type = aux->user_type;
-            strcpy((*user_details)->personal_data.name, aux->personal_data.name);
-            (*user_details)->personal_data.nif = aux->personal_data.nif;
-            strcpy((*user_details)->personal_data.login.email, aux->personal_data.login.email);
-            strcpy((*user_details)->personal_data.login.password, aux->personal_data.login.password);
-            strcpy((*user_details)->personal_data.phone_number, aux->personal_data.phone_number);
-            (*user_details)->personal_data.balance = aux->personal_data.balance;
-            strcpy((*user_details)->personal_data.address.street, aux->personal_data.address.street);
-            strcpy((*user_details)->personal_data.address.city, aux->personal_data.address.city);
-            strcpy((*user_details)->personal_data.address.country, aux->personal_data.address.country);
-            strcpy((*user_details)->personal_data.address.postal_code, aux->personal_data.address.postal_code);
+        printf("\nEmail -> %s | Password %s", aux->personal_data.login.email, aux->personal_data.login.password);
 
-            return 1;
-        }
+        /*  if (strcmp(aux->personal_data.login.email, email) == 0 && strcmp(aux->personal_data.login.password, encryptedPassword) == 0)
+          {
+              (*user_details)->user_type = aux->user_type;
+              strcpy((*user_details)->uuid, aux->uuid);
+              strcpy((*user_details)->personal_data.name, aux->personal_data.name);
+              (*user_details)->personal_data.nif = aux->personal_data.nif;
+              strcpy((*user_details)->personal_data.login.email, aux->personal_data.login.email);
+              strcpy((*user_details)->personal_data.login.password, aux->personal_data.login.password);
+              strcpy((*user_details)->personal_data.phone_number, aux->personal_data.phone_number);
+              (*user_details)->personal_data.balance = aux->personal_data.balance;
+              strcpy((*user_details)->personal_data.address.street, aux->personal_data.address.street);
+              strcpy((*user_details)->personal_data.address.city, aux->personal_data.address.city);
+              strcpy((*user_details)->personal_data.address.country, aux->personal_data.address.country);
+              strcpy((*user_details)->personal_data.address.postal_code, aux->personal_data.address.postal_code);
+              strcpy((*user_details)->rented_transport.rented_transport_code, aux->rented_transport.rented_transport_code);
+              strcpy((*user_details)->rented_transport.rented_transport_type, aux->rented_transport.rented_transport_type);
+              (*user_details)->rented_transport.rented_at = aux->rented_transport.rented_at;
+              strcpy((*user_details)->rented_transport.uuid, aux->rented_transport.uuid);
+              (*user_details)->personal_data.dob.day = aux->personal_data.dob.day;
+              (*user_details)->personal_data.dob.month = aux->personal_data.dob.month;
+              (*user_details)->personal_data.dob.year = aux->personal_data.dob.year;
+
+              return 1;
+          }
+
+          
         aux = aux->next_node;
     }
 
-    return 0;
+    press_to_continue();*/
+
+    return 1;
 }

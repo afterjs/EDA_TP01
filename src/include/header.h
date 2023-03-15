@@ -3,6 +3,16 @@
 #include "../structs/aux.transport.struct.h"
 #include "../structs/transport.struct.h"
 
+
+int printUserDetails(Aux_User *user);
+int showAccountDetails(Aux_User *user);
+int updateTransportAtFile(Aux_Transport *transport);
+int updateUserAtFile(Aux_User *user);
+int finishRent(Aux_User *user, Transport **transport, time_t *stop_time);
+char *timestamp_to_text(time_t timestamp);
+Transport *checkTransportAvailable(Transport *transports, char *code);
+int rentTransport(Aux_User *user, Transport **transport);
+void showMenu(Aux_User *user, Transport **transports);
 int client_main(Aux_User **user_details);
 void login(User **users, Aux_User **user_details);
 void register_user(User **users, Aux_User **user_details);
