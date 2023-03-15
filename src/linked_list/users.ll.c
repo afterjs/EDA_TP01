@@ -310,15 +310,6 @@ int load_users(User **users)
     free(aux);
     fclose(fp);
 
-    while (*users != NULL)
-    {
-        printf("\nUsername -> %s", (*users)->personal_data.login.email);
-        printf("\nNIF -> %d", (*users)->personal_data.nif);
-        printf("\nDob -> %d/%d/%d\n", (*users)->personal_data.dob.day, (*users)->personal_data.dob.month, (*users)->personal_data.dob.year);
-        *users = (*users)->next_node;
-    }
-
-    press_to_continue();
 
     return 1;
 }
