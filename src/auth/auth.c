@@ -27,26 +27,25 @@ void login(User **users, Aux_User **user_details)
 
     if (authenticate(email, password, users, user_details) == 1)
     {
-            printf("\nAUTH");
-        /*  if ((*user_details)->user_type == 0)
-          {
-              free(*users);
-              client_main(user_details);
-          }
-          else
-          {
-              printf("MENU ADMIN\n");
-              press_to_continue();
-          }*/
+        if ((*user_details)->user_type == 0)
+        {
+            free(*users);
+            client_main(user_details);
+        }
+        else
+        {
+            printf("MENU ADMIN\n");
+            press_to_continue();
+        }
     }
-      else
-     {
-        /* cls();
-         printf("Invalid credentials, try again\n\n");
-         press_to_continue();
-         login(users, user_details);*/
-          printf("\n NOTAUTH");
-     }
+    else
+    {
+        cls();
+        printf("Invalid credentials, try again\n\n");
+        press_to_continue();
+        login(users, user_details);
+        printf("\n NOTAUTH");
+    }
 
     press_to_continue();
 }
@@ -102,48 +101,46 @@ void register_user(User **users, Aux_User **user_details)
 void authMenu(User **users, Aux_User **user_details)
 {
 
-    login(users, user_details);
+    int option = 0;
 
-    /* int option = 0;
+    do
+    {
+        cls();
 
-     do
-     {
-         cls();
+        if (option < 0 || option > 2)
+        {
+            cls();
 
-         if (option < 0 || option > 2)
-         {
-             cls();
+            printf("Invalid option, try again\n\n");
+        }
 
-             printf("Invalid option, try again\n\n");
-         }
+        printf("\tWelcome to the GoSmartCity\n\n");
+        printf("\t1 - Login\n");
+        printf("\t2 - Register\n");
+        printf("\t0 - Exit\n\n");
+        printf("What do you want to do? Choose an option: ");
+        scanf("%d", &option);
+    } while (option < 0 || option > 2);
 
-         printf("\tWelcome to the GoSmartCity\n\n");
-         printf("\t1 - Login\n");
-         printf("\t2 - Register\n");
-         printf("\t0 - Exit\n\n");
-         printf("What do you want to do? Choose an option: ");
-         scanf("%d", &option);
-     } while (option < 0 || option > 2);
-
-     switch (option)
-     {
-     case 1:
-         login(users, user_details);
-         break;
-     case 2:
-         register_user(users, user_details);
-         printf("User registered successfully\n");
-         press_to_continue();
-         login(users, user_details);
-         break;
-     default:
-         cls();
-         printf("Thank you for using GoSmartCity!!!\n");
-         press_to_continue();
-         free(*user_details);
-         free(*users);
-         break;
-     }*/
+    switch (option)
+    {
+    case 1:
+        login(users, user_details);
+        break;
+    case 2:
+        register_user(users, user_details);
+        printf("User registered successfully\n");
+        press_to_continue();
+        login(users, user_details);
+        break;
+    default:
+        cls();
+        printf("Thank you for using GoSmartCity!!!\n");
+        press_to_continue();
+        free(*user_details);
+        free(*users);
+        break;
+    }
 }
 
 int createUsersFile()
@@ -216,32 +213,30 @@ int authenticate(char *email, char *password, User **users, Aux_User **user_deta
             strcmp(current_user->personal_data.login.password, encryptedPassword) == 0)
         {
 
-             (*user_details)->user_type = current_user->user_type;
-               strcpy((*user_details)->uuid, current_user->uuid);
-               strcpy((*user_details)->personal_data.name, current_user->personal_data.name);
-               (*user_details)->personal_data.nif = current_user->personal_data.nif;
-               strcpy((*user_details)->personal_data.login.email, current_user->personal_data.login.email);
-               strcpy((*user_details)->personal_data.login.password, current_user->personal_data.login.password);
-               strcpy((*user_details)->personal_data.phone_number, current_user->personal_data.phone_number);
-               (*user_details)->personal_data.balance = current_user->personal_data.balance;
-               strcpy((*user_details)->personal_data.address.street, current_user->personal_data.address.street);
-               strcpy((*user_details)->personal_data.address.city, current_user->personal_data.address.city);
-               strcpy((*user_details)->personal_data.address.country, current_user->personal_data.address.country);
-               strcpy((*user_details)->personal_data.address.postal_code, current_user->personal_data.address.postal_code);
-               strcpy((*user_details)->rented_transport.rented_transport_code, current_user->rented_transport.rented_transport_code);
-               strcpy((*user_details)->rented_transport.rented_transport_type, current_user->rented_transport.rented_transport_type);
-               (*user_details)->rented_transport.rented_at = current_user->rented_transport.rented_at;
-               strcpy((*user_details)->rented_transport.uuid, current_user->rented_transport.uuid);
-               (*user_details)->personal_data.dob.day = current_user->personal_data.dob.day;
-               (*user_details)->personal_data.dob.month = current_user->personal_data.dob.month;
-               (*user_details)->personal_data.dob.year = current_user->personal_data.dob.year;
-
+            (*user_details)->user_type = current_user->user_type;
+            strcpy((*user_details)->uuid, current_user->uuid);
+            strcpy((*user_details)->personal_data.name, current_user->personal_data.name);
+            (*user_details)->personal_data.nif = current_user->personal_data.nif;
+            strcpy((*user_details)->personal_data.login.email, current_user->personal_data.login.email);
+            strcpy((*user_details)->personal_data.login.password, current_user->personal_data.login.password);
+            strcpy((*user_details)->personal_data.phone_number, current_user->personal_data.phone_number);
+            (*user_details)->personal_data.balance = current_user->personal_data.balance;
+            strcpy((*user_details)->personal_data.address.street, current_user->personal_data.address.street);
+            strcpy((*user_details)->personal_data.address.city, current_user->personal_data.address.city);
+            strcpy((*user_details)->personal_data.address.country, current_user->personal_data.address.country);
+            strcpy((*user_details)->personal_data.address.postal_code, current_user->personal_data.address.postal_code);
+            strcpy((*user_details)->rented_transport.rented_transport_code, current_user->rented_transport.rented_transport_code);
+            strcpy((*user_details)->rented_transport.rented_transport_type, current_user->rented_transport.rented_transport_type);
+            (*user_details)->rented_transport.rented_at = current_user->rented_transport.rented_at;
+            strcpy((*user_details)->rented_transport.uuid, current_user->rented_transport.uuid);
+            (*user_details)->personal_data.dob.day = current_user->personal_data.dob.day;
+            (*user_details)->personal_data.dob.month = current_user->personal_data.dob.month;
+            (*user_details)->personal_data.dob.year = current_user->personal_data.dob.year;
 
             return 1;
         }
         current_user = current_user->next_node;
     }
-
 
     return 0;
     /* char *encryptedPassword = encrypt(password);
