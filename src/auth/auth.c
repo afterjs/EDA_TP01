@@ -86,7 +86,6 @@ void register_user(User **users, Aux_User **user_details)
         saveUserAtFile(aux);
         *user_details = aux;
         free(aux);
-        free(*users);
         break;
     case 0:
         login(users, user_details);
@@ -131,7 +130,7 @@ void authMenu(User **users, Aux_User **user_details)
         register_user(users, user_details);
         printf("User registered successfully\n");
         press_to_continue();
-        login(users, user_details);
+        authMenu(users, user_details);
         break;
     default:
         cls();
@@ -203,12 +202,6 @@ int authenticate(char *email, char *password, User **users, Aux_User **user_deta
     while (current_user != NULL)
     {
 
-        /*if (strcmp(email, current_user->personal_data.login.email) == 0)
-        {
-            printf("\nAUTH AT %d\n", counter++);
-            return 1;
-        }*/
-
         if (strcmp(current_user->personal_data.login.email, email) == 0 &&
             strcmp(current_user->personal_data.login.password, encryptedPassword) == 0)
         {
@@ -239,45 +232,4 @@ int authenticate(char *email, char *password, User **users, Aux_User **user_deta
     }
 
     return 0;
-    /* char *encryptedPassword = encrypt(password);
-
-     User *aux = *users;
-
-
-     while (aux != NULL)
-     {
-         printf("\nEmail -> %s | Password %s", aux->personal_data.login.email, aux->personal_data.login.password);
-
-         /*  if (strcmp(aux->personal_data.login.email, email) == 0 && strcmp(aux->personal_data.login.password, encryptedPassword) == 0)
-           {
-               (*user_details)->user_type = aux->user_type;
-               strcpy((*user_details)->uuid, aux->uuid);
-               strcpy((*user_details)->personal_data.name, aux->personal_data.name);
-               (*user_details)->personal_data.nif = aux->personal_data.nif;
-               strcpy((*user_details)->personal_data.login.email, aux->personal_data.login.email);
-               strcpy((*user_details)->personal_data.login.password, aux->personal_data.login.password);
-               strcpy((*user_details)->personal_data.phone_number, aux->personal_data.phone_number);
-               (*user_details)->personal_data.balance = aux->personal_data.balance;
-               strcpy((*user_details)->personal_data.address.street, aux->personal_data.address.street);
-               strcpy((*user_details)->personal_data.address.city, aux->personal_data.address.city);
-               strcpy((*user_details)->personal_data.address.country, aux->personal_data.address.country);
-               strcpy((*user_details)->personal_data.address.postal_code, aux->personal_data.address.postal_code);
-               strcpy((*user_details)->rented_transport.rented_transport_code, aux->rented_transport.rented_transport_code);
-               strcpy((*user_details)->rented_transport.rented_transport_type, aux->rented_transport.rented_transport_type);
-               (*user_details)->rented_transport.rented_at = aux->rented_transport.rented_at;
-               strcpy((*user_details)->rented_transport.uuid, aux->rented_transport.uuid);
-               (*user_details)->personal_data.dob.day = aux->personal_data.dob.day;
-               (*user_details)->personal_data.dob.month = aux->personal_data.dob.month;
-               (*user_details)->personal_data.dob.year = aux->personal_data.dob.year;
-
-               return 1;
-           }
-
-
-         aux = aux->next_node;
-     }
-
-     press_to_continue();*/
-
-    return 1;
 }

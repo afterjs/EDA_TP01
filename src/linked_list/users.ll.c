@@ -2,6 +2,46 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
+
+int removeUserFromFile(Aux_User *user)
+{
+    FILE *fp;
+    FILE *temp;
+    int found = 0;
+    Aux_User temp_user;
+
+    fp = fopen("./data/users.bin", "rb");
+    temp = fopen("./data/temp.bin", "wb");
+
+    if (fp == NULL || temp == NULL)
+    {
+        return 0;
+    }
+
+    while (fread(&temp_user, sizeof(Aux_User), 1, fp))
+    {
+        if (strcmp(temp_user.uuid, user->uuid) == 0)
+        {
+            found = 1;
+            continue;
+        }
+        fwrite(&temp_user, sizeof(Aux_User), 1, temp);
+    }
+
+    fclose(fp);
+    fclose(temp);
+
+    if (found == 0)
+    {
+        remove("./data/temp.bin");
+        return 0;
+    }
+
+    remove("./data/users.bin");
+    rename("./data/temp.bin", "./data/users.bin");
+    return 1;
+}
 
 int updateUserAtFile(Aux_User *user)
 {
@@ -276,7 +316,12 @@ Aux_User *getUserDetails(User *users)
     user->user_type = 0;
     strcpy(user->rented_transport.rented_transport_code, "XXX000");
     strcpy(user->uuid, gen_uuid());
-    encrypt(user->personal_data.login.password);
+
+    char *password = encrypt(user->personal_data.login.password);
+
+    strcpy(user->personal_data.login.password, password);
+
+    users = insertUser(users, user);
 
     return user;
 }
@@ -303,13 +348,11 @@ int load_users(User **users)
 
     while (fread(aux, sizeof(Aux_User), 1, fp) == 1)
     {
-
         *users = insertUser(*users, aux);
     }
 
     free(aux);
     fclose(fp);
-
 
     return 1;
 }

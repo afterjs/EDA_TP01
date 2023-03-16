@@ -105,12 +105,30 @@ int getAge(int day, int month, int year)
     return age;
 }
 
-// convert timestamp to text format dd/mm/yyyy hh:mm:ss
-
 char *timestamp_to_text(time_t timestamp)
 {
     struct tm *tm = localtime(&timestamp);
     static char buf[20];
     strftime(buf, sizeof(buf), "%d/%m/%Y %H:%M:%S", tm);
     return buf;
+}
+
+int isValidLocation(char *location)
+{
+    int dot = 0;
+    if (location[0] == '/' && location[1] == '/' && location[2] == '/')
+    {
+        for (int i = 0; i < strlen(location); i++)
+        {
+            if (location[i] == '.')
+            {
+                dot++;
+            }
+        }
+        if (dot == 2)
+        {
+            return 1;
+        }
+    }
+    return 0;
 }

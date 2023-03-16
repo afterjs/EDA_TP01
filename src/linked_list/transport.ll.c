@@ -3,6 +3,18 @@
 #include <string.h>
 #include <stdlib.h>
 
+/**
+    @brief Updates the information of a transport in the "transport.txt" file.
+    This function receives an instance of the Aux_Transport structure and updates the information
+    of the transport that has the same UUID in the "transport.txt" file.
+    The file is opened in read-write mode, and the function seeks the line that contains the UUID.
+    When found, the function updates the line with the new information and returns 1 to indicate success.
+    @param transport A pointer to an instance of the Aux_Transport structure that contains the updated information.
+    @return 1 if the update was successful, or 0 if there was an error opening the file.
+    @note This function assumes that the file "data/transport.txt" exists and is in the correct format.
+    @note This function assumes that the UUID of the transport is unique.
+*/
+
 int updateTransportAtFile(Aux_Transport *transport)
 {
     FILE *file = fopen("data/transport.txt", "r+"); // Open file in read-write mode
@@ -21,9 +33,9 @@ int updateTransportAtFile(Aux_Transport *transport)
 
         if (strstr(line, transport->uuid) != NULL)
         {
-            fseek(file, pos, SEEK_SET); // Move file pointer to the beginning of the line
+            fseek(file, pos, SEEK_SET);
             fprintf(file, "%s;%s;%s;%s;%.2f;%d;%.2f;%.2f\n", transport->uuid, transport->type_name, transport->code, transport->position, transport->battery, transport->state, transport->price.price_base, transport->price.price_per_minute);
-            break; // Stop searching for the UUID once found and updated
+            break;
         }
 
         pos = ftell(file); // Get the current file position

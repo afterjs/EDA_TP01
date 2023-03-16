@@ -3,7 +3,16 @@
 #include "../structs/aux.transport.struct.h"
 #include "../structs/transport.struct.h"
 
-
+int main();
+int isValidLocation(char *location);
+int showAllTransportInPosition(Transport **transport);
+int showAllTransportByBattery(Transport **transport);
+int removeUserFromFile(Aux_User *user);
+int deleteAccount(Aux_User *user);
+int depositMoney(Aux_User *user);
+int ask_for_update(char *info);
+void update_info(char *info, Aux_User *user);
+int updateAccountDetails(Aux_User *user);
 int printUserDetails(Aux_User *user);
 int showAccountDetails(Aux_User *user);
 int updateTransportAtFile(Aux_Transport *transport);
