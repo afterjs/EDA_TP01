@@ -207,9 +207,9 @@ int depositMoney(Aux_User *user)
 
     printf("\tGoSmartCity [Balance %.2f€]", user->personal_data.balance);
     printf("\n\n\tAmount deposited with success!");
-    printf("\n\tBalance: %.2f", user->personal_data.balance);
+    printf("\n\tBalance: %.2f€", user->personal_data.balance);
     press_to_continue();
-
+    showAccountDetails(user);
     return 1;
 }
 
@@ -402,7 +402,7 @@ int showAccountDetails(Aux_User *user)
 
     do
     {
-        if (option < 1 || option > 4)
+        if (option < 1 || option > 5)
         {
             cls();
             printf("Invalid option! Try again!\n");
@@ -414,10 +414,10 @@ int showAccountDetails(Aux_User *user)
         printf("\n\t2 - Update account details");
         printf("\n\t3 - Deposit money to account");
         printf("\n\t4 - Delete Account");
-        printf("\n\t4 - Back");
+        printf("\n\t5 - Back");
         printf("\n\n\tChoose an option: ");
         scanf("%d", &option);
-    } while (option < 1 || option > 4);
+    } while (option < 1 || option > 5);
 
     switch (option)
     {
@@ -443,6 +443,8 @@ int showAccountDetails(Aux_User *user)
         {
             deleteAccount(user);
         }
+        break;
+    case 5:
         return 1;
     }
     return 1;
@@ -751,7 +753,6 @@ void showMenu(Aux_User *user, Transport **transports)
 
     while (1)
     {
-
         if (strcmp(user->rented_transport.rented_transport_code, "XXX000") == 0)
         {
 

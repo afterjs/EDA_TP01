@@ -68,8 +68,6 @@ int updateUserAtFile(Aux_User *user)
 int saveUserAtFile(Aux_User *user)
 {
 
-    printf("\nsaving new user at file with email -> %s", user->personal_data.login.email);
-
     FILE *fp = fopen("./data/users.bin", "ab");
     if (fp == NULL)
     {
@@ -79,7 +77,6 @@ int saveUserAtFile(Aux_User *user)
     fwrite(user, sizeof(Aux_User), 1, fp);
     fclose(fp);
 
-    press_to_continue();
     return 1;
 }
 
