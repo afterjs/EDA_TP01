@@ -5,6 +5,11 @@
 
 int main();
 
+int updateAccountAdminDetails(User **users, Aux_User **user_details);
+int listAllUsers(User **users, Aux_User **user_details);
+int deleteAdminAccount(Aux_User **user, User **users);
+int userManagementMenu(User **users, Aux_User **user_details);
+int listAllVehicles(Transport **transports);
 Transport *removeTransport(Transport *transports, char *code);
 char *generate_code();
 int transportManagementMenu(Transport **transport);
@@ -32,13 +37,12 @@ int rentTransport(Aux_User *user, Transport **transport);
 int client_main(Aux_User **user_details);
 void login(User **users, Aux_User **user_details);
 void register_user(User **users, Aux_User **user_details);
-Aux_User *getUserDetails(User *users);
+Aux_User *getUserDetails(User *users, int type);
 char *encrypt(char *str);
 int load_users(User **users);
 User *insertUser(User *users, Aux_User *user);
 User *existUser(User *users, int *nif, char *email, char *phone_number);
 int checkEmail(char *email);
-User *listUsers(User *users);
 int createUsersFile();
 char *gen_uuid();
 int existFile(char *path, char *openMode);

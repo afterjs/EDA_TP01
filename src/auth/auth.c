@@ -75,7 +75,7 @@ void register_user(User **users, Aux_User **user_details)
     {
     case 1:
         Aux_User *aux = malloc(sizeof(Aux_User));
-        aux = getUserDetails(*users);
+        aux = getUserDetails(*users, 0);
 
         if (aux == NULL)
         {

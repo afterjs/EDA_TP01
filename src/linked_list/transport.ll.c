@@ -25,7 +25,7 @@ int updateTransportAtFile(Aux_Transport *transport)
         return 0;
     }
 
-    char line[4096];
+    char line[512];
     long pos = 0; // Keep track of the file position
 
     while (fgets(line, sizeof(line), file))
@@ -34,19 +34,27 @@ int updateTransportAtFile(Aux_Transport *transport)
         if (strstr(line, transport->uuid) != NULL)
         {
             fseek(file, pos, SEEK_SET);
-            fprintf(file, "%s;%s;%s;%s;%.2f;%d;%.2f;%.2f\n", transport->uuid, transport->type_name, transport->code, transport->position, transport->battery, transport->state, transport->price.price_base, transport->price.price_per_minute);
+            fprintf(file, "%s;%s;%s;%s;%.2f;%d;%.2f;%.2f", transport->uuid, transport->type_name, transport->code, transport->position, transport->battery, transport->state, transport->price.price_base, transport->price.price_per_minute);
             break;
         }
 
-        pos = ftell(file); 
+        pos = ftell(file);
     }
 
     fclose(file);
     return 1;
 }
 
-// 0 disponivel | 1 alugado
-
+/**
+ * @brief Checks if a transport is available.
+ * This function receives a pointer to the head of the linked list of transports and a string with the code of the transport.
+ * The function then iterates through the linked list and checks if the code of the transport matches the code passed as a parameter.
+ * If the code is found, the function returns a pointer to the transport, otherwise it returns NULL.
+ * @param transports A pointer to the head of the linked list of transports.
+ * @param code A string with the code of the transport.
+ * @return A pointer to the transport if it is available, or NULL if it is not.
+ *
+ */
 Transport *checkTransportAvailable(Transport *transports, char *code)
 {
 
@@ -65,6 +73,15 @@ Transport *checkTransportAvailable(Transport *transports, char *code)
     return NULL;
 }
 
+/**
+ * @brief Inserts a transport at the end of the linked list.
+ * This function receives a pointer to the head of the linked list of transports and a pointer to an instance of the Aux_Transport structure.
+ * The function then allocates memory for a new node and inserts the transport at the end of the linked list.
+ * @param transports A pointer to the head of the linked list of transports.
+ * @param transport A pointer to an instance of the Aux_Transport structure.
+ * @return A pointer to the head of the linked list of transports.
+ *
+ */
 Transport *insertTransport(Transport *transports, Aux_Transport *transport)
 {
     if (transports == NULL)
@@ -119,24 +136,40 @@ Transport *insertTransport(Transport *transports, Aux_Transport *transport)
     return transports;
 }
 
-Transport *removeTransport(Transport *transports, char *code) {
+/**
+ * @brief Removes a transport from the linked list.
+ * This function receives a pointer to the head of the linked list of transports and a string with the code of the transport.
+ * The function then iterates through the linked list and checks if the code of the transport matches the code passed as a parameter.
+ * If the code is found, the function removes the transport from the linked list and returns a pointer to the head of the linked list.
+ * If the code is not found, the function returns a pointer to the head of the linked list.
+ * @param transports A pointer to the head of the linked list of transports.
+ * @param code A string with the code of the transport.
+ * @return A pointer to the head of the linked list of transports.
+ */
+Transport *removeTransport(Transport *transports, char *code)
+{
     Transport *prev = NULL;
     Transport *curr = transports;
 
-    while (curr != NULL && strcmp(curr->code, code) != 0) {
+    while (curr != NULL && strcmp(curr->code, code) != 0)
+    {
         prev = curr;
         curr = curr->next_node;
     }
 
-    if (curr == NULL) {
+    if (curr == NULL)
+    {
         printf("Transport not found in the list.\n");
         return transports;
     }
 
-    if (prev == NULL) {
+    if (prev == NULL)
+    {
         // The transport to be removed is the head of the list
         transports = curr->next_node;
-    } else {
+    }
+    else
+    {
         prev->next_node = curr->next_node;
     }
 
@@ -145,7 +178,13 @@ Transport *removeTransport(Transport *transports, char *code) {
     return transports;
 }
 
-
+/**
+ * @brief Saves a transport at the file.
+ * This function receives a pointer to an instance of the Aux_Transport structure.
+ * The function then opens the file where the transports are saved and saves the transport at the end of the file.
+ * @param transport A pointer to an instance of the Aux_Transport structure.
+ * @return 1 if the transport was saved successfully, or 0 if it was not.
+ */
 int saveTransportAtFile(Aux_Transport *transport)
 {
     FILE *file = fopen("./data/transport.txt", "a");
@@ -161,6 +200,17 @@ int saveTransportAtFile(Aux_Transport *transport)
     fclose(file);
 }
 
+/**
+ * @brief Loads the transports from the file.
+ * This function receives a pointer to the head of the linked list of transports.
+ * The function then opens the file where the transports are saved and loads the transports into the linked list.
+ * The function checks if the file exists, if it does not exist, the function creates the file.
+ * @param transports A pointer to the head of the linked list of transports.
+ * @see createTransportFile()
+ * @see existFile()
+ * @return 1 if the transports were loaded successfully, or 0 if they were not.
+ *
+ */
 int loadTransport(Transport **transports)
 {
 

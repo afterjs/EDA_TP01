@@ -75,6 +75,19 @@ struct KeyValue arr[MAX] = {
     {"Z", "C"},
 };
 
+/**
+ * @brief Encrypts a string using a substitution cipher.
+ *
+ * This function takes a string and replaces each character with a corresponding
+ * character from a substitution table. The substitution table is defined in a 
+ * global array `arr`.
+ *
+ * @param str The string to encrypt.
+ *
+ * @return The encrypted string.
+ *
+ * @see arr
+ */
 char *encrypt(char *str)
 {
     int i, j;

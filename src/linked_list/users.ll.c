@@ -80,32 +80,6 @@ int saveUserAtFile(Aux_User *user)
     return 1;
 }
 
-User *listUsers(User *users)
-{
-    User *aux = users;
-    int counter = 1;
-
-    while (aux != NULL)
-    {
-        printf("\nUser ->%d", counter++);
-        printf("\nUUID: %s", aux->uuid);
-        printf("\nUser type: %d", aux->user_type);
-        printf("\nName: %s", aux->personal_data.name);
-        printf("\nNIF: %d", aux->personal_data.nif);
-        printf("\nDate of birth: %d/%d/%d", aux->personal_data.dob.day, aux->personal_data.dob.month, aux->personal_data.dob.year);
-        printf("\nEmail: %s", aux->personal_data.login.email);
-        printf("\nPassword: %s", aux->personal_data.login.password);
-        printf("\nPhone number: %s", aux->personal_data.phone_number);
-        printf("\nBalance: %.2f", aux->personal_data.balance);
-        printf("\nStreet: %s", aux->personal_data.address.street);
-        printf("\nCity: %s", aux->personal_data.address.city);
-        printf("\nCountry: %s", aux->personal_data.address.country);
-        printf("\nPostal code: %s\n\n", aux->personal_data.address.postal_code);
-        aux = aux->next_node;
-    }
-    return users;
-}
-
 User *existUser(User *users, int *nif, char *email, char *phone_number)
 {
     User *aux = users;
@@ -215,7 +189,7 @@ User *insertUser(User *users, Aux_User *user)
     return users;
 }
 
-Aux_User *getUserDetails(User *users)
+Aux_User *getUserDetails(User *users, int type)
 {
 
     cls();
@@ -310,7 +284,7 @@ Aux_User *getUserDetails(User *users)
     scanf("%[^;\n]", user->personal_data.address.postal_code);
 
     user->personal_data.balance = 0.0;
-    user->user_type = 0;
+    user->user_type = type;
     strcpy(user->rented_transport.rented_transport_code, "XXX000");
     strcpy(user->uuid, gen_uuid());
 
