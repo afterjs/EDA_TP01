@@ -4,6 +4,18 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+/**
+ * @brief Removes a user from a binary file containing users.
+ *
+ * This function reads all the users from the file "users.bin" and writes them to a temporary file "temp.bin".
+ * If the UUID of the user to be removed is found in the file, that user is skipped and not written to the temporary file.
+ * Finally, the original file is deleted and the temporary file is renamed to "users.bin".
+ *
+ * @param user The user to be removed from the file.
+ * @return 1 if the user was successfully removed, 0 otherwise.
+ *
+ * @see Aux_User
+ */
 int removeUserFromFile(Aux_User *user)
 {
     FILE *fp;
@@ -43,6 +55,16 @@ int removeUserFromFile(Aux_User *user)
     return 1;
 }
 
+/**
+ * @brief Updates an existing user in the file.
+ *
+ * This function updates the data of an existing user in the file "./data/users.bin" with the new data passed as an argument.
+ *
+ * @param user The updated user to be saved.
+ * @return int Returns 1 on success, or 0 on failure.
+ *
+ * @see fopen(), fseek(), fread(), fwrite(), fclose()
+ */
 int updateUserAtFile(Aux_User *user)
 {
     FILE *fp = fopen("./data/users.bin", "rb+");
@@ -65,6 +87,15 @@ int updateUserAtFile(Aux_User *user)
     return 0;
 }
 
+/**
+ * Saves an Aux_User struct to the users file.
+ *
+ * @param user Pointer to the Aux_User struct to be saved.
+ *
+ * @return 1 if the save was successful, 0 otherwise.
+ *
+ * @see Aux_User
+ */
 int saveUserAtFile(Aux_User *user)
 {
 
@@ -80,6 +111,18 @@ int saveUserAtFile(Aux_User *user)
     return 1;
 }
 
+/**
+ * @brief Checks if a user already exists in a linked list of users.
+ *
+ * @param users Pointer to the first node of the linked list.
+ * @param nif Pointer to an integer representing the user's NIF number.
+ * @param email Pointer to a string representing the user's email address.
+ * @param phone_number Pointer to a string representing the user's phone number.
+ *
+ * @return Pointer to the existing user, or NULL if the user does not exist in the linked list.
+ *
+ * @see User
+ */
 User *existUser(User *users, int *nif, char *email, char *phone_number)
 {
     User *aux = users;
@@ -108,6 +151,17 @@ User *existUser(User *users, int *nif, char *email, char *phone_number)
     return NULL;
 }
 
+/**
+ * @brief Inserts a new user into the linked list of users.
+ *
+ * If the linked list of users is empty, the function creates the head node.
+ * Otherwise, it traverses the list to find the last node and appends a new node to the end of the list.
+ *
+ * @param[in] users The head node of the linked list of users.
+ * @param[in] user The user to be inserted.
+ * @return The head node of the linked list of users after the user has been inserted.
+ * @see Aux_User, User
+ */
 User *insertUser(User *users, Aux_User *user)
 {
 
@@ -189,6 +243,14 @@ User *insertUser(User *users, Aux_User *user)
     return users;
 }
 
+/**
+ * @brief Gets the user details and inserts it into the list of users.
+ *
+ * @param users List of users.
+ * @param type Type of user.
+ * @return Aux_User* Pointer to the struct of user's auxiliary data.
+ * @see cls(), getAge(), press_to_continue(), checkEmail(), existUser(), encrypt(), insertUser()
+ */
 Aux_User *getUserDetails(User *users, int type)
 {
 
@@ -297,6 +359,16 @@ Aux_User *getUserDetails(User *users, int type)
     return user;
 }
 
+/**
+ * @brief Loads users from a binary file and inserts them into a user linked list
+ *
+ * @param users Pointer to the user linked list
+ * @return int Returns 1 on success, 0 on failure
+ *
+ * @see existFile()
+ * @see createUsersFile()
+ * @see insertUser()
+ */
 int load_users(User **users)
 {
 

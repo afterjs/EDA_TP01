@@ -3,6 +3,17 @@
 #include <string.h>
 #include <stdlib.h>
 
+/**
+ * @brief Shows all transports in a given location.
+ * 
+ * The function prompts the user to enter a location, and then displays
+ * information on all transports that are currently in that location.
+ * 
+ * @param transport The head of the linked list of transports.
+ * @return 1 if the function executed successfully, and 0 otherwise.
+ * 
+ * @see cls(), isValidLocation(), press_to_continue()
+ */
 int showAllTransportInPosition(Transport **transport)
 {
 
@@ -64,6 +75,14 @@ int showAllTransportInPosition(Transport **transport)
     return 1;
 }
 
+/**
+ * Sorts and displays all transports in descending order of battery.
+ * 
+ * @param transport Pointer to the head of the transport linked list.
+ * @return 1 if the operation was successful, 0 otherwise.
+ * 
+ * @see Transport
+ */
 int showAllTransportByBattery(Transport **transport)
 {
 
@@ -123,6 +142,18 @@ int showAllTransportByBattery(Transport **transport)
     return 1;
 }
 
+/**
+ * @brief Deletes an user account.
+ * 
+ * This function will delete an user account and all the information related to it.
+ * This is a dangerous action and cannot be undone.
+ * 
+ * @param user The user to delete the account.
+ * @return Returns 1 if the account was deleted successfully, otherwise returns 0.
+ * 
+ * @see removeUserFromFile()
+ * @see showAccountDetails()
+ */
 int deleteAccount(Aux_User *user)
 {
 
@@ -182,6 +213,19 @@ int deleteAccount(Aux_User *user)
     }
 }
 
+/**
+ * @brief Deposits a specified amount of money into the user's account.
+ * 
+ * @param user Pointer to the Aux_User struct representing the user account.
+ * @return int Returns 1 upon successful deposit.
+ * 
+ * This function prompts the user to input a valid amount of money to deposit (between 0 and 50 euros),
+ * updates the user's account balance accordingly, and displays the new balance.
+ * It also calls the `updateUserAtFile` function to update the user's data in the file.
+ * Finally, it displays the updated account details and returns 1 to indicate a successful deposit.
+ * 
+ * @see cls(), printf(), scanf(), updateUserAtFile(), press_to_continue(), showAccountDetails()
+ */
 int depositMoney(Aux_User *user)
 {
 
@@ -213,6 +257,19 @@ int depositMoney(Aux_User *user)
     return 1;
 }
 
+/**
+ * @brief Deposits a specified amount of money into the user's account.
+ * 
+ * @param user Pointer to the Aux_User struct representing the user account.
+ * @return int Returns 1 upon successful deposit.
+ * 
+ * This function prompts the user to input a valid amount of money to deposit (between 0 and 50 euros),
+ * updates the user's account balance accordingly, and displays the new balance.
+ * It also calls the `updateUserAtFile` function to update the user's data in the file.
+ * Finally, it displays the updated account details and returns 1 to indicate a successful deposit.
+ * 
+ * @see cls(), printf(), scanf(), updateUserAtFile(), press_to_continue(), showAccountDetails()
+ */
 void update_info(char *info, Aux_User *user)
 {
     cls();
@@ -306,6 +363,18 @@ void update_info(char *info, Aux_User *user)
     }
 }
 
+/**
+ * @brief Updates the user's account details.
+ *
+ * This function allows the user to update their username, password, and date of birth.
+ * The updated information is saved to a file, and the user is shown their updated account details.
+ *
+ * @param user Pointer to the user's account information.
+ *
+ * @return Returns 0 if successful, 1 otherwise.
+ *
+ * @see ask_for_update(), update_info(), updateUserAtFile(), showAccountDetails()
+ */
 int updateAccountDetails(Aux_User *user)
 {
 
@@ -333,6 +402,15 @@ int updateAccountDetails(Aux_User *user)
     showAccountDetails(user);
 }
 
+/**
+ * @brief Prints the details of a given user.
+ * 
+ * @param user Pointer to the user to print details from.
+ * 
+ * @return 1 if operation was successful.
+ *
+ * @see press_to_continue(), showAccountDetails()
+ */
 int printUserDetails(Aux_User *user)
 {
 
@@ -358,6 +436,20 @@ int printUserDetails(Aux_User *user)
     return 1;
 }
 
+/**
+ * @brief Displays account details and provides options to interact with the account.
+ * 
+ * Displays the user's balance and provides options to show account details, update account details,
+ * deposit money to account, delete account and go back to the main menu.
+ * 
+ * @param user A pointer to an `Aux_User` struct representing the user account.
+ * @return int Returns 1 if successful, 0 otherwise.
+ * 
+ * @see printUserDetails()
+ * @see updateAccountDetails()
+ * @see depositMoney()
+ * @see deleteAccount()
+ */
 int showAccountDetails(Aux_User *user)
 {
 
@@ -414,6 +506,18 @@ int showAccountDetails(Aux_User *user)
     return 1;
 }
 
+/**
+ * @brief Finish the user's rent and update the transport's state and battery
+ * 
+ * @param user The user who is finishing the rent
+ * @param transport The list of all transports
+ * @param stop_time The time when the user finished the rent
+ * @return int 1 if the function executed successfully, otherwise 0
+ * 
+ * @see timestamp_to_text()
+ * @see updateUserAtFile()
+ * @see updateTransportAtFile()
+ */
 int finishRent(Aux_User *user, Transport **transport, time_t *stop_time)
 {
 
@@ -502,6 +606,20 @@ int finishRent(Aux_User *user, Transport **transport, time_t *stop_time)
     return 1;
 }
 
+
+/**
+ * @brief Rent a transport for a user
+ * 
+ * @param user Pointer to the user who wants to rent a transport
+ * @param transport Pointer to the linked list of available transports
+ * 
+ * @return 1 if successful, 0 otherwise
+ * 
+ * @see checkTransportAvailable()
+ * @see press_to_continue()
+ * @see updateUserAtFile()
+ * @see updateTransportAtFile()
+ */
 int rentTransport(Aux_User *user, Transport **transport)
 {
     cls();
@@ -620,6 +738,16 @@ int rentTransport(Aux_User *user, Transport **transport)
     return 1;
 }
 
+/**
+ * @brief Creates transports and saves them to a file.
+ *
+ * @return 0 if the operation is successful.
+ *
+ * This function creates several `Aux_Transport` objects and initializes them with data, then saves them to a file using the `saveTransportAtFile` function. The objects are deallocated from memory after they have been saved.
+ *
+ * @see Aux_Transport
+ * @see saveTransportAtFile
+ */
 int createTransportFile()
 {
 
@@ -713,6 +841,18 @@ int createTransportFile()
     return 0;
 }
 
+/**
+ * Displays the menu of options available to the client, and handles the chosen option.
+ * 
+ * @param user A pointer to an Aux_User struct representing the user.
+ * @param transports A pointer to an array of pointers to Transport structs.
+ * 
+ * @see rentTransport()
+ * @see showAccountDetails()
+ * @see showAllTransportByBattery()
+ * @see showAllTransportInPosition()
+ * @see finishRent()
+ */
 void showClientMenu(Aux_User *user, Transport **transports)
 
 {
@@ -793,6 +933,16 @@ void showClientMenu(Aux_User *user, Transport **transports)
     // printf("\nTransport UUID %s", )
 }
 
+/**
+ * @brief Main function for the client interface.
+ *
+ * This function loads the transports from the file and displays the client menu.
+ *
+ * @param user_details Pointer to the user details.
+ * @return Returns 1 on success, otherwise 0.
+ *
+ * @see loadTransport(), showClientMenu()
+ */
 int client_main(Aux_User **user_details)
 {
 
