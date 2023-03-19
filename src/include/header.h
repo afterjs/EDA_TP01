@@ -4,6 +4,13 @@
 #include "../structs/transport.struct.h"
 
 int main();
+
+Transport *removeTransport(Transport *transports, char *code);
+char *generate_code();
+int transportManagementMenu(Transport **transport);
+int transportManagementMenu(Transport **transport);
+void showAdminMenu(User **users, Aux_User **user_details, Transport **transports);
+int admin_main(User **users, Aux_User **user_details);
 int isValidLocation(char *location);
 int showAllTransportInPosition(Transport **transport);
 int showAllTransportByBattery(Transport **transport);
@@ -18,10 +25,10 @@ int showAccountDetails(Aux_User *user);
 int updateTransportAtFile(Aux_Transport *transport);
 int updateUserAtFile(Aux_User *user);
 int finishRent(Aux_User *user, Transport **transport, time_t *stop_time);
+void showClientMenu(Aux_User *user, Transport **transports);
 char *timestamp_to_text(time_t timestamp);
 Transport *checkTransportAvailable(Transport *transports, char *code);
 int rentTransport(Aux_User *user, Transport **transport);
-void showMenu(Aux_User *user, Transport **transports);
 int client_main(Aux_User **user_details);
 void login(User **users, Aux_User **user_details);
 void register_user(User **users, Aux_User **user_details);

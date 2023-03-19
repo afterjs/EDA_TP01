@@ -213,42 +213,6 @@ int depositMoney(Aux_User *user)
     return 1;
 }
 
-int ask_for_update(char *info)
-{
-
-    int choice = 1;
-
-    do
-    {
-        cls();
-        printf("\n\tUpdating informations\n");
-
-        if (choice != 1 && choice != 2)
-        {
-            printf("\tInvalid option, please try again\n");
-        }
-
-        if (strcmp(info, "dob") != 0)
-        {
-            printf("\n\tDo you want to update %s? (yes - 1 / No - 2): ", info);
-        }
-        else
-        {
-            printf("\n\tDo you want to update your date of birth? (yes - 1 / No - 2): ");
-        }
-        scanf("%d", &choice);
-    } while (choice != 1 && choice != 2);
-
-    if (choice == 1)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
 void update_info(char *info, Aux_User *user)
 {
     cls();
@@ -591,7 +555,10 @@ int rentTransport(Aux_User *user, Transport **transport)
         }
 
         printf("\t🛹Vehicle Information🛹");
-        printf("\n\n\tPrice per minute: %.2f€⌚", aux->price.price_per_minute);
+
+        printf("\n\n\tCode: %s 🆔", aux->code);
+        printf("\n\tType: %s 🏂", aux->type_name);
+        printf("\n\tPrice per minute: %.2f€⌚", aux->price.price_per_minute);
         printf("\n\tPrice base: %.2f€⌚", aux->price.price_base);
         printf("\n\tBattery: %.2f%%⚡", aux->battery);
 
@@ -746,7 +713,7 @@ int createTransportFile()
     return 0;
 }
 
-void showMenu(Aux_User *user, Transport **transports)
+void showClientMenu(Aux_User *user, Transport **transports)
 
 {
     int option = 1;
@@ -833,7 +800,7 @@ int client_main(Aux_User **user_details)
 
     if (loadTransport(&transports))
     {
-        showMenu(*user_details, &transports);
+        showClientMenu(*user_details, &transports);
         return 1;
     }
 }

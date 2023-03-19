@@ -2,6 +2,72 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include "../include/header.h"
+
+int ask_for_update(char *info)
+{
+
+    int choice = 1;
+
+    do
+    {
+        cls();
+        printf("\n\tUpdating informations\n");
+
+        if (choice != 1 && choice != 2)
+        {
+            printf("\tInvalid option, please try again\n");
+        }
+
+        if (strcmp(info, "price_minute") == 0)
+        {
+            printf("\n\tDo you want to update the price per minute? (yes - 1 / No - 2): ");
+        }
+        else if (strcmp(info, "price_base") == 0)
+        {
+            printf("\n\tDo you want to update the price base? (yes - 1 / No - 2): ");
+        }
+        else if (strcmp(info, "dob") == 0)
+        {
+            printf("\n\tDo you want to update your date of birth? (yes - 1 / No - 2): ");
+        }
+        else
+        {
+            printf("\n\tDo you want to update %s? (yes - 1 / No - 2): ", info);
+        }
+        scanf("%d", &choice);
+    } while (choice != 1 && choice != 2);
+
+    if (choice == 1)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+char *generate_code()
+{
+    char *code = malloc(7); // Allocate memory for the code
+    char letters[26] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    int i;
+
+    for (i = 0; i < 3; i++)
+    {
+        code[i] = letters[rand() % 26];
+    }
+
+    for (i = 3; i < 6; i++)
+    {
+        code[i] = '0' + (rand() % 10);
+    }
+
+    code[6] = '\0';
+
+    return code;
+}
 
 char *gen_uuid()
 {

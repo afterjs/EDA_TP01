@@ -38,7 +38,7 @@ int updateTransportAtFile(Aux_Transport *transport)
             break;
         }
 
-        pos = ftell(file); // Get the current file position
+        pos = ftell(file); 
     }
 
     fclose(file);
@@ -118,6 +118,33 @@ Transport *insertTransport(Transport *transports, Aux_Transport *transport)
 
     return transports;
 }
+
+Transport *removeTransport(Transport *transports, char *code) {
+    Transport *prev = NULL;
+    Transport *curr = transports;
+
+    while (curr != NULL && strcmp(curr->code, code) != 0) {
+        prev = curr;
+        curr = curr->next_node;
+    }
+
+    if (curr == NULL) {
+        printf("Transport not found in the list.\n");
+        return transports;
+    }
+
+    if (prev == NULL) {
+        // The transport to be removed is the head of the list
+        transports = curr->next_node;
+    } else {
+        prev->next_node = curr->next_node;
+    }
+
+    free(curr);
+
+    return transports;
+}
+
 
 int saveTransportAtFile(Aux_Transport *transport)
 {

@@ -1,7 +1,7 @@
 #include "./include/header.h"
 
 #include <stdlib.h>
-
+#include <stdio.h>
 
 int main(int argc)
 {
@@ -10,7 +10,8 @@ int main(int argc)
 
     if (load_users(&users))
     {
-        authMenu(&users, &user_details);
+         authMenu(&users, &user_details);
+      
     }
 
     return 0;

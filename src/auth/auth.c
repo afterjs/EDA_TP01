@@ -34,8 +34,7 @@ void login(User **users, Aux_User **user_details)
         }
         else
         {
-            printf("MENU ADMIN\n");
-            press_to_continue();
+            admin_main(users, user_details);
         }
     }
     else
